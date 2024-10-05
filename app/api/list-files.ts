@@ -24,14 +24,16 @@ const drive = google.drive({
 export async function listFilesInFolder() {
   try {
     const query = `'${FOLDER_ID}' in parents and mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' and trashed=false`;
+
+    console.log("Query:", query);
     const response = await drive.files.list({
       q: query,
       fields: "files(id, name)",
     });
 
-    const files = response.data.files;
+    console.log("wtf");
 
-    console.log("Files:", files);
+    const files = response.data.files;
 
     if (files && files.length > 0) {
       const dataArray = [];
