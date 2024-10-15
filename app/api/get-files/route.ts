@@ -3,17 +3,7 @@ import { listFilesInFolder } from "../list-files";
 
 export async function GET() {
   const response = await listFilesInFolder().then((res) => res);
-
-  if (response?.fileData) {
-    return NextResponse.json({
-      message: "Successful!",
-      data: response.fileData,
-    });
-  }
-
-  return NextResponse.json({
-    message: "Error! No files found.",
-  });
+  return NextResponse.json(response);
 }
 
 export async function POST(request: NextRequest) {

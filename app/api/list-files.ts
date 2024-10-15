@@ -23,17 +23,14 @@ const drive = google.drive({
 
 export async function listFilesInFolder() {
   try {
-    const query = `'${FOLDER_ID}' in parents and mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' and trashed=false`;
-
-    console.log("Query:", query);
+    const query = `('${FOLDER_ID}' in parents) and (mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType='application/vnd.google-apps.spreadsheet') and trashed=false`;
     const response = await drive.files.list({
       q: query,
       fields: "files(id, name)",
     });
 
-    console.log("wtf");
-
     const files = response.data.files;
+    console.log("Files => ", files);
 
     if (files && files.length > 0) {
       const dataArray = [];
@@ -50,11 +47,11 @@ export async function listFilesInFolder() {
         dataArray.push({ file: dataObjectArray });
       }
 
-      return { fileData: dataArray };
+      return { message: "Successful", data: dataArray };
     } else {
-      return { fileData: [] };
+      return { message: "No files found.", data: [] };
     }
-  } catch (error) {
-    console.error("Error retrieving files:", error);
+  } catch (e) {
+    return { message: "Error while retrieving files.", data: [], error: e };
   }
 }
